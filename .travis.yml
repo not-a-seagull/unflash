@@ -1,0 +1,15 @@
+language: csharp
+solution: unflash.sln
+
+jobs:
+  include:
+    - mono: latest
+
+install:
+ - nuget restore unflash.sln
+
+before_script:
+ - msbuild /p:Configuration=Release /p:Platform=x86 unflash.sln
+
+script:
+ - echo noop

@@ -1,5 +1,5 @@
-﻿/*
- * swf-reader/SwfCompression.cs
+/*
+ * <filename>
  * unflash - Program to convert SWF objects to Canvas-based HTML programs 
  * 
  * Copyright 2019 not_a_seagull
@@ -25,28 +25,3 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
  * DAMAGE.
  */
-
-using System;
-
-namespace SwfReader {
-  /// <summary>
-  /// Describes whether an SWF file is uncompressed ("FWS"), or is compressed under the Zlib algorithm ("CWS"), 
-  /// or is compressed under the LZMA algorithm ("LWS")
-  /// </summary>
-  public enum SwfCompression {
-    /// <summary>
-    /// Represents an SWF file being uncompressed
-    /// </summary>
-    Uncompressed = 0,
-
-    /// <summary>
-    /// Represents an SWF file being compressed via Zlib
-    /// </summary>
-    ZlibCompressed = 1,
-
-    /// <summary>
-    /// Represents an SWF file being compressed via LZMA
-    /// </summary>
-    LzmaCompressed = 2
-  }
-}
