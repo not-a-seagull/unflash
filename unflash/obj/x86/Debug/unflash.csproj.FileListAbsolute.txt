@@ -1,5 +1,0 @@
-/home/jtnunley/Programming/Projects/unflash/unflash/bin/Debug/unflash.exe
-/home/jtnunley/Programming/Projects/unflash/unflash/bin/Debug/unflash.pdb
-/home/jtnunley/Programming/Projects/unflash/unflash/obj/x86/Debug/unflash.csprojAssemblyReference.cache
-/home/jtnunley/Programming/Projects/unflash/unflash/obj/x86/Debug/unflash.exe
-/home/jtnunley/Programming/Projects/unflash/unflash/obj/x86/Debug/unflash.pdb
