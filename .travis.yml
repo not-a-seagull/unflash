@@ -12,7 +12,7 @@ before_script:
  - msbuild /p:Configuration=Release /p:Platform=x86 $TRAVIS_BUILD_DIR/unflash.sln
 
 script:
- - mono $TRAVIS_BUILD_DIR/unflash/bin/Release/unflash.exe
+ - mono $TRAVIS_BUILD_DIR/packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe $TRAVIS_BUILD_DIR/unflash/bin/Release/unflash.exe
 
 notifications:
   email:

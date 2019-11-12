@@ -1,5 +1,5 @@
 ﻿/*
- * unflash/Program.cs
+ * unit-tests/SwfHeaderTests.cs
  * unflash - Program to convert SWF objects to Canvas-based HTML programs 
  * 
  * Copyright 2019 not_a_seagull
@@ -26,51 +26,38 @@
  * DAMAGE.
  */
 
-using Mono.Options;
+using NUnit.Framework;
 using SwfReader;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
-namespace Unflash {
-  class MainClass {
-    public static int Main(string[] args) {
-      bool preserveComments = false;
+namespace UnitTests
+{
+  [TestFixture]
+  public class SwfHeaderTests
+  {
+    public void RunHeaderTest(byte[] source, SwfCompression expectedCompression, byte expectedVersion, int expectedLength) {
+      // use a memory stream for testing
+      using (MemoryStream stream = new MemoryStream(source))
+      {
+        SwfHeader header = SwfHeader.FromStream(stream);
 
-      // parse options passed in from command line
-      OptionSet options = new OptionSet() {
-        { "c|preserve-comments", "Try to preserve comments from ActionScript code in generated JavaScript code",
-          v => preserveComments = v != null }
-      };
-
-      List<string> extras;
-      try {
-        extras = options.Parse(args);
-      } catch (OptionException e) {
-        Console.Error.Write("unflash: ");
-        Console.Error.WriteLine(e.Message);
-        return 1;
+        Assert.AreEqual(expectedCompression, header.Compression);
+        Assert.AreEqual(expectedVersion, header.Version);
+        Assert.AreEqual(expectedLength, header.FileLength);
       }
+    }
 
-      // extras must have at least one instance: the file uri
-      if (extras.Count == 0) {
-        Console.Error.WriteLine("unflash: Please pass in the location of the SWF file as the first argument");
-        return 1;
-      }
+    [Test]
+    public void ReadTest() {
+      byte[] source1 = { 0x46, 0x57, 0x53, 0x09, 0x0A, 0x00, 0x00, 0x00 };
+      RunHeaderTest(source1, SwfCompression.Uncompressed, 9, 10);
 
-      // check to see if the file uri exists
-      string fileUri = extras[0];
-      if (!File.Exists(fileUri)) {
-        Console.Error.WriteLine(String.Format("unflash: Unable to find file {0}", fileUri));
-        return 1;
-      }
+      byte[] source2 = { 0x43, 0x57, 0x53, 0x12, 0x10, 0x00, 0x00, 0x00 };
+      RunHeaderTest(source2, SwfCompression.ZlibCompressed, 18, 16);
 
-      Console.WriteLine("Beginning file read...");
-
-      using (FileStream f = File.Open(fileUri, FileMode.Open))
-        Console.WriteLine(SwfHeader.FromStream(f));
-
-      return 0;
+      byte[] source3 = { 0x5A, 0x57, 0x53, 0x21, 0x0B, 0x00, 0x00, 0x00 };
+      RunHeaderTest(source3, SwfCompression.LzmaCompressed, 33, 11);
     }
   }
 }
