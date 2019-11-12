@@ -12,4 +12,4 @@ before_script:
  - msbuild /p:Configuration=Release /p:Platform=x86 unflash.sln
 
 script:
- - mono bin/Release/unflash.exe
+ - mono $BUILD/bin/Release/unflash.exe
