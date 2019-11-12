@@ -6,10 +6,15 @@ jobs:
     - mono: latest
 
 install:
- - nuget restore unflash.sln
+ - nuget restore $TRAVIS_BUILD_DIR/unflash.sln
 
 before_script:
- - msbuild /p:Configuration=Release /p:Platform=x86 unflash.sln
+ - msbuild /p:Configuration=Release /p:Platform=x86 $TRAVIS_BUILD_DIR/unflash.sln
 
 script:
  - mono $TRAVIS_BUILD_DIR/unflash/bin/Release/unflash.exe
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
