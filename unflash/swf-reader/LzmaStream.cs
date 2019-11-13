@@ -1,5 +1,5 @@
 ﻿/*
- * Program.cs
+ * swf-reader/LzmaStream.cs
  * unflash - Program to convert SWF objects to Canvas-based HTML programs 
  * 
  * Copyright 2019 not_a_seagull
@@ -26,51 +26,60 @@
  * DAMAGE.
  */
 
-using Mono.Options;
-using SwfReader;
+using SevenZip.Compression.LZMA;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
-namespace Unflash {
-  class MainClass {
-    public static int Main(string[] args) {
-      bool preserveComments = false;
+namespace SwfReader {
+  public class LzmaStream : Stream {
+    private Stream stream;
+    private int length;
+    private Decoder decoder;
 
-      // parse options passed in from command line
-      OptionSet options = new OptionSet() {
-        { "c|preserve-comments", "Try to preserve comments from ActionScript code in generated JavaScript code",
-          v => preserveComments = v != null }
-      };
+    public LzmaStream(Stream wrappedStream, int expectedLength)
+    {
+      stream = wrappedStream;
+      length = expectedLength;
 
-      List<string> extras;
-      try {
-        extras = options.Parse(args);
-      } catch (OptionException e) {
-        Console.Error.Write("unflash: ");
-        Console.Error.WriteLine(e.Message);
-        return 1;
-      }
+      // setup 7zip
+      byte[] buffer = new byte[5];
+      stream.Read(buffer, 0, 5);
+      decoder.SetDecoderProperties(buffer);
+    }
 
-      // extras must have at least one instance: the file uri
-      if (extras.Count == 0) {
-        Console.Error.WriteLine("unflash: Please pass in the location of the SWF file as the first argument");
-        return 1;
-      }
+    public override bool CanRead => throw new NotImplementedException();
 
-      // check to see if the file uri exists
-      string fileUri = extras[0];
-      if (!File.Exists(fileUri)) {
-        Console.Error.WriteLine(String.Format("unflash: Unable to find file {0}", fileUri));
-        return 1;
-      }
+    public override bool CanSeek => throw new NotImplementedException();
 
-      Console.WriteLine("Beginning file read...");
+    public override bool CanWrite => throw new NotImplementedException();
 
-      using (FileStream f = File.Open(fileUri, FileMode.Open))
-        Console.WriteLine(SwfHeader.FromStream(f));
+    public override long Length => throw new NotImplementedException();
 
-      return 0;
+    public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public override void Flush()
+    {
+      throw new NotImplementedException();
+    }
+
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override void SetLength(long value)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override void Write(byte[] buffer, int offset, int count)
+    {
+      throw new NotImplementedException("Writing is currently not supported by LzmaStream");
     }
   }
 }

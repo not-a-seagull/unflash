@@ -1,5 +1,5 @@
 ﻿/*
- * Program.cs
+ * swf-reader/SwfHeader.cs
  * unflash - Program to convert SWF objects to Canvas-based HTML programs 
  * 
  * Copyright 2019 not_a_seagull
@@ -26,51 +26,44 @@
  * DAMAGE.
  */
 
-using Mono.Options;
-using SwfReader;
+using Ionic.Zlib;
 using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 
-namespace Unflash {
-  class MainClass {
-    public static int Main(string[] args) {
-      bool preserveComments = false;
+namespace SwfReader
+{
+  public class SwfPackage
+  {
+    public SwfPackage(SwfHeader header, Rectangle boundingRect)
+    {
+      Header = header;
+      BoundingRect = boundingRect;
+    }
 
-      // parse options passed in from command line
-      OptionSet options = new OptionSet() {
-        { "c|preserve-comments", "Try to preserve comments from ActionScript code in generated JavaScript code",
-          v => preserveComments = v != null }
-      };
+    public SwfHeader Header { get; private set; }
+    public Rectangle BoundingRect { get; protected set; }
 
-      List<string> extras;
-      try {
-        extras = options.Parse(args);
-      } catch (OptionException e) {
-        Console.Error.Write("unflash: ");
-        Console.Error.WriteLine(e.Message);
-        return 1;
+    public int BoundingRectWidth {
+      get { return BoundingRect.Width; }
+    }
+
+    public int BoundingRectHeight {
+      get { return BoundingRect.Height; }
+    }
+
+    public static SwfPackage FromStream(Stream source) {
+      // get the header first so we know compression
+      SwfHeader header = SwfHeader.FromStream(source);
+
+      // uncompress the file based on compression method
+      Stream uncompressed;
+      if (header.Compression == SwfCompression.ZlibCompressed) {
+        uncompressed = new ZlibStream(source, CompressionMode.Decompress);
+      } else if (header.Compression == SwfCompression.LzmaCompressed {
+
       }
-
-      // extras must have at least one instance: the file uri
-      if (extras.Count == 0) {
-        Console.Error.WriteLine("unflash: Please pass in the location of the SWF file as the first argument");
-        return 1;
-      }
-
-      // check to see if the file uri exists
-      string fileUri = extras[0];
-      if (!File.Exists(fileUri)) {
-        Console.Error.WriteLine(String.Format("unflash: Unable to find file {0}", fileUri));
-        return 1;
-      }
-
-      Console.WriteLine("Beginning file read...");
-
-      using (FileStream f = File.Open(fileUri, FileMode.Open))
-        Console.WriteLine(SwfHeader.FromStream(f));
-
-      return 0;
+    }
     }
   }
 }

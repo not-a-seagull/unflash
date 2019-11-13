@@ -37,6 +37,13 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="DotNetZip">
+      <HintPath>..\packages\DotNetZip.1.13.4\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="SevenZip">
+      <HintPath>..\packages\SevenZip.19.0.0\lib\net20\SevenZip.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -45,6 +52,8 @@
     <Compile Include="swf-reader\SwfHeader.cs" />
     <Compile Include="swf-reader\SwfReadException.cs" />
     <Compile Include="unit-tests\SwfHeaderTests.cs" />
+    <Compile Include="swf-reader\SwfPackage.cs" />
+    <Compile Include="swf-reader\LzmaStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
